@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITConnect - Tableau de bord</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #2d8cf0, #36d1dc);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      margin-top: 20px;
+      font-size: 2.5rem;
+    }
+    .user-info {
+      margin: 10px 0 30px;
+      font-size: 1.2rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1200px;
+    }
+    .article-wrapper {
+      width: 250px;
+      transition: 0.15s all ease-in-out;
+      border-radius: 10px;
+      padding: 5px;
+      border: 4px solid transparent;
+      cursor: pointer;
+      background-color: white;
+    }
+    .article-wrapper:hover {
+      box-shadow: 10px 10px 0 #4e84ff, 20px 20px 0 #4444bd;
+      border-color: #0578c5;
+      transform: translate(-20px, -20px);
+    }
+    .article-wrapper:active {
+      box-shadow: none;
+      transform: translate(0, 0);
+    }
+    .rounded-lg {
+      border-radius: 10px;
+    }
+    .project-info {
+      padding-top: 20px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .project-title {
+      font-size: 2em;
+      margin: 0;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: black;
+    }
+    .flex-pr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .project-type {
+      background: #b2b2fd;
+      color: #1a41cd;
+      font-weight: bold;
+      padding: 0.3em 0.7em;
+      border-radius: 15px;
+      font-size: 12px;
+      letter-spacing: -0.6px;
+    }
+    .project-hover {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      padding: 9px;
+      transition: all 0.3s ease;
+    }
+    .article-wrapper:hover .project-hover {
+      transform: rotate(-45deg);
+      background-color: #a6c2f0;
+    }
+    .container-project {
+      width: 100%;
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #e0e0e0;
+      font-size: 80px;
+    }
+    button {
+      margin-top: 40px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #fff;
+      color: #2d8cf0;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const supabase = createClient(
+      'https://hlsaibmnokqnfjsqigla.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhsc2FpYm5tb2txbmZzanFnaWxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzMDMzNzAsImV4cCI6MjA2NDg3OTM3MH0.898P0NJWXSLl_VdMNG_Z7Y6Yi7CtbYmsU7hW2nTTA-0'
+    );
+
+    async function checkUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = 'index.html';
+      } else {
+        document.getElementById('user-email').textContent = user.email;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        window.location.href = 'index.html';
+      });
+
+      checkUser();
+    });
+  </script>
+</head>
+<body>
+  <h1>Bienvenue sur ITConnect !</h1>
+  <div class="user-info">Connecté en tant que : <span id="user-email"></span></div>
+  <div class="grid">
+    <article class="article-wrapper" onclick="window.location='chat.html'">
+      <div class="rounded-lg container-project">💬</div>
+      <div class="project-info">
+        <div class="flex-pr">
+          <div class="project-title">Chat</div>
+          <div class="project-hover">➡️</div>
+        </div>
+        <div class="types">
+          <span class="project-type">• Messagerie</span>
+        </div>
+      </div>
+    </article>
+    <article class="article-wrapper" onclick="window.location='files.html'">
+      <div class="rounded-lg container-project">📁</div>
+      <div class="project-info">
+        <div class="flex-pr">
+          <div class="project-title">Fichiers</div>
+          <div class="project-hover">➡️</div>
+        </div>
+        <div class="types">
+          <span class="project-type">• Partage</span>
+        </div>
+      </div>
+    </article>
+    <article class="article-wrapper" onclick="window.location='codex.html'">
+      <div class="rounded-lg container-project">📖</div>
+      <div class="project-info">
+        <div class="flex-pr">
+          <div class="project-title">Codex</div>
+          <div class="project-hover">➡️</div>
+        </div>
+        <div class="types">
+          <span class="project-type">• Recherche</span>
+        </div>
+      </div>
+    </article>
+    <article class="article-wrapper" onclick="window.location='homework.html'">
+      <div class="rounded-lg container-project">📋</div>
+      <div class="project-info">
+        <div class="flex-pr">
+          <div class="project-title">Devoirs</div>
+          <div class="project-hover">➡️</div>
+        </div>
+        <div class="types">
+          <span class="project-type">• Suivi</span>
+        </div>
+      </div>
+    </article>
+    <article class="article-wrapper" onclick="window.location='notes.html'">
+      <div class="rounded-lg container-project">📝</div>
+      <div class="project-info">
+        <div class="flex-pr">
+          <div class="project-title">Notes</div>
+          <div class="project-hover">➡️</div>
+        </div>
+        <div class="types">
+          <span class="project-type">• Résumés</span>
+        </div>
+      </div>
+    </article>
+    <article class="article-wrapper" onclick="window.location='calendar.html'">
+      <div class="rounded-lg container-project">📆</div>
+      <div class="project-info">
+        <div class="flex-pr">
+          <div class="project-title">Planning</div>
+          <div class="project-hover">➡️</div>
+        </div>
+        <div class="types">
+          <span class="project-type">• Organisation</span>
+        </div>
+      </div>
+    </article>
+    <article class="article-wrapper" onclick="window.location='profil.html'">
+      <div class="rounded-lg container-project">👤</div>
+      <div class="project-info">
+        <div class="flex-pr">
+          <div class="project-title">Profil</div>
+          <div class="project-hover">➡️</div>
+        </div>
+        <div class="types">
+          <span class="project-type">• Compte</span>
+        </div>
+      </div>
+    </article>
+  </div>
+  <button id="logoutBtn">Se déconnecter</button>
+</body>
+</html>
